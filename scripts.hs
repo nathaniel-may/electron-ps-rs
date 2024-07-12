@@ -29,21 +29,27 @@ run :: Command -> Shell ()
 run cmd = case cmd of
     Build -> sh build
     BuildRelease -> sh buildRelease
-    Test -> procs "cargo" ["test"] empty
-    Fmt -> procs "cargo" ["fmt"] empty
-    Install -> view $ procs "npm" [ "install" ] empty
-    Clean -> traverse_ (\dir -> procs "rm" [ "-rf", T.pack dir ] empty ) builtPaths
+    Test -> procs_ "cargo" ["test"]
+    Fmt -> procs_ "cargo" ["fmt"]
+    Install -> view $ procs_ "npm" [ "install" ]
+    Clean -> traverse_ (\dir -> procs_ "rm" [ "-rf", T.pack dir ] ) builtPaths
+
+buildArgs :: [Text] -> Shell ()
+buildArgs args = do
+    output "cargo.log" $ inproc_ "cargo" (["build", "--message-format=json"] <> args)
+    procs "npx" ["neon", "dist"] (inproc_ "cat" ["cargo.log"])
+    rm "cargo.log"
 
 build :: Shell ()
 build = do
     run Install
-    procs "cargo" ["build"] empty
+    buildArgs []
 
 buildRelease :: Shell ()
 buildRelease = do
     run Install
     run Test
-    procs "cargo" ["build", "--release"] empty
+    buildArgs ["--release"]
 
 -- leading "./" and lack of trailing "/" is necessary to match output of find
 builtPaths :: [FilePath]
@@ -52,6 +58,7 @@ builtPaths =
     , "./node_modules"
     , "./index.node"
     , "./.stack-work"
+    , "./cargo.log"
     ]
 
 parser :: ParserInfo Command
@@ -67,3 +74,12 @@ parser = info
         <> command "fmt"           (info (pure Fmt)          ( progDesc "format source files in place" ))
         <> command "install"       (info (pure Install)      ( progDesc "install build dependencies" ))
         <> command "clean"         (info (pure Clean)        ( progDesc "delete all build files" )))
+
+procs_ :: MonadIO io => Text -> [Text] -> io ()
+procs_ cmd args = procs cmd args empty
+
+proc_ :: MonadIO io => Text -> [Text] -> io ExitCode
+proc_ cmd args = proc cmd args empty
+
+inproc_ :: Text -> [Text] -> Shell Line
+inproc_ cmd args = inproc cmd args empty
