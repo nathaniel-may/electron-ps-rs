@@ -9,6 +9,9 @@ function createWindow() {
     },
   });
   mainWindow.loadFile("index.html");
+
+  // Open the DevTools.
+  mainWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(() => {

@@ -1,6 +1,6 @@
 module Site.HTML
     ( headContents
-    , body ) where
+    ) where
 
 import Prelude
 
@@ -31,17 +31,3 @@ meta = map metaFrom
 
 metaFrom :: ∀ a b. Tuple String String -> HH.HTML a b
 metaFrom kv = HH.meta [ HP.name (fst kv), mkHP "content" (snd kv) ]
-
-body :: ∀ a b. HH.HTML a b
-body =
-    HH.div_
-        [ HH.button [ HP.id "btn" ] [ HH.text "Open a File" ]
-        , HH.text "File path: "
-        , HH.strong [ HP.id "filePath" ] []
-        ]
-        -- <button type="button" id="btn">Open a File</button>
-        -- File path: <strong id="filePath"></strong>
-        -- <script src="./renderer.js"></script>
-    where
-        -- TODO add `before:backdrop-blur-[2px]` so it takes effect somehow
-        heroBefore = "before:h-min-screen before:h-max-screen before:absolute before:bg-center before:bg-no-repeat before:bg-cover before:bg-fixed before:inset-0 before:bg-hero before:opacity-70"
