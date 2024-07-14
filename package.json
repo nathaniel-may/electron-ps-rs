@@ -3,30 +3,22 @@
   "version": "0.1.0",
   "description": "Example electron app with PureScript and Rust",
   "main": "index.node",
-  "scripts": {
-    "test": "cargo test",
-    "cargo-build": "cargo build --message-format=json > cargo.log",
-    "cross-build": "cross build --message-format=json > cross.log",
-    "postcargo-build": "neon dist < cargo.log",
-    "postcross-build": "neon dist -m /target < cross.log",
-    "debug": "npm run cargo-build --",
-    "build": "npm run cargo-build -- --release",
-    "cross": "npm run cross-build -- --release"
-  },
   "author": "nathaniel may",
   "license": "MIT",
   "devDependencies": {
-    "@neon-rs/cli": "0.1.73"
+    "@neon-rs/cli": "0.1.73",
+    "esbuild": "0.20.1",
+    "purescript": "^0.15.15",
+    "spago": "^0.21.0"
+  },
+  "scripts": {
+    "spago-bundle-app": "spago bundle-app --to dist/bundle.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nathaniel-may/electron-ps-rs.git"
   },
-  "keywords": [
-    "electron",
-    "purescript",
-    "rust"
-  ],
+  "keywords": ["electron", "purescript", "rust"],
   "bugs": {
     "url": "https://github.com/nathaniel-may/electron-ps-rs/issues"
   },
