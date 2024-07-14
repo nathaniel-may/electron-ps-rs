@@ -1,12 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron/main");
 const path = require("node:path");
-
-async function handleFileOpen() {
-  const { canceled, filePaths } = await dialog.showOpenDialog();
-  if (!canceled) {
-    return filePaths[0];
-  }
-}
+const rust = require("../index.node");
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -18,7 +12,7 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  ipcMain.handle("dialog:openFile", handleFileOpen);
+  ipcMain.handle("dialog:openFile", rust.pick_file);
   createWindow();
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
