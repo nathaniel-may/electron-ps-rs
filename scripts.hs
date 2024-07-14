@@ -45,6 +45,7 @@ buildArgs args = do
   rm "cargo.log"
   -- spago can only find a local esbuild installation if it is run via npm
   procs_ "npm" ["run", "spago-bundle-app"]
+  procs_ "npx" ["tailwindcss", "-c", "tailwind.config.js", "-i", "./src/style.css", "-o", "./dist/style.css"]
 
 build :: Shell ()
 build = do

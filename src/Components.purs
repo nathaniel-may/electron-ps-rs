@@ -8,6 +8,7 @@ import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
+import Site.Utils (css, cssMerge)
 
 data Action = OpenPicker
 type State = String
@@ -41,7 +42,8 @@ body =
     initialState _ = ""
 
     render :: ∀ slots. State -> H.ComponentHTML Action slots m
-    render filepath = HH.div_
+    render filepath = HH.div
+        [ css "bg-blue-300" ]
         [ HH.button [ HP.id "btn", HE.onClick \_ -> OpenPicker ] [ HH.text "Open a File" ]
         , HH.text "File path: "
         , HH.strong [ HP.id "filePath" ] [ HH.text filepath ]
