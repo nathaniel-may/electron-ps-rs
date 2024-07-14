@@ -14,7 +14,7 @@ import Options.Applicative
 import Turtle
 
 
-data Command = Build | BuildRelease | Test | Fmt | Install | Clean deriving (Read, Show, Eq)
+data Command = Run | Build | BuildRelease | Test | Fmt | Install | Clean deriving (Read, Show, Eq)
 
 newtype ScriptException = ScriptException ByteString deriving (Show)
 instance Exception ScriptException
@@ -27,6 +27,7 @@ main = (sh . run) =<< customExecParser (prefs showHelpOnEmpty) parser
 
 run :: Command -> Shell ()
 run cmd = case cmd of
+    Run -> procs_ "npx" ["electron", "./src/main.js"]
     Build -> sh build
     BuildRelease -> sh buildRelease
     Test -> procs_ "cargo" ["test"]
@@ -68,7 +69,8 @@ parser = info
     where
     subcommands :: Parser Command
     subcommands = subparser
-        (  command "build"         (info (pure Build)        ( progDesc "build without optimizations" ))
+        (  command "run"           (info (pure Run)          ( progDesc "run the electron app" ))
+        <> command "build"         (info (pure Build)        ( progDesc "build without optimizations" ))
         <> command "build-release" (info (pure BuildRelease) ( progDesc "build with optimiations for release" ))
         <> command "test"          (info (pure Test)         ( progDesc "run all app tests" ))
         <> command "fmt"           (info (pure Fmt)          ( progDesc "format source files in place" ))
