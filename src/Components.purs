@@ -2,13 +2,12 @@ module Site.Components where
 
 import Prelude
 
-import Effect.Aff.Class (class MonadAff)
+import Effect.Aff.Class (class MonadAff, liftAff)
+import Electron.IpcCall as ElectronIpc
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
-import Site.HTML as HTML
-import Type.Proxy (Proxy(..))
 
 data Action = OpenPicker
 type State = String
@@ -49,4 +48,6 @@ body =
         ]
 
     handleAction = case _ of
-      OpenPicker -> H.put "dummy"
+      OpenPicker -> do
+        path <- liftAff $ ElectronIpc.openFile
+        H.put path

@@ -2,7 +2,8 @@ let dev = env:TICKLEPALOOZA_DEV ? False
 in
   { name = "ticklepalooza"
   , dependencies =
-    [ "aff"
+    [ "aff-promise"
+    , "aff"
     , "effect"
     , "exceptions"
     , "halogen"

@@ -1,3 +1,7 @@
+// THIS IS ELECTRON "MAIN" PROCESS
+// This file is the entry point to the "backend" of the electron app.
+// Map ipc channel calls to function implementations in this file.
+
 const { app, BrowserWindow, ipcMain, dialog } = require("electron/main");
 const path = require("node:path");
 const rust = require("../index.node");
@@ -10,8 +14,8 @@ function createWindow() {
   });
   mainWindow.loadFile("index.html");
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // For debugging with browser tools
+  // mainWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(() => {

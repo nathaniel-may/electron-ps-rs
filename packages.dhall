@@ -76,20 +76,21 @@ let upstream = --
 in  upstream
   with benchotron =
       { dependencies =
-          [ "arrays"
-          , "exists"
-          , "profunctor"
-          , "strings"
-          , "quickcheck"
-          , "lcg"
-          , "transformers"
-          , "foldable-traversable"
-          , "exceptions"
-          , "node-fs"
-          , "node-buffer"
-          , "node-readline"
+          [ "aff-promise"
+          , "arrays"
           , "datetime"
+          , "exceptions"
+          , "exists"
+          , "foldable-traversable"
+          , "lcg"
+          , "node-buffer"
+          , "node-fs"
+          , "node-readline"
           , "now"
+          , "profunctor"
+          , "quickcheck"
+          , "strings"
+          , "transformers"
           ]
       , repo =
           "https://github.com/hdgarrood/purescript-benchotron.git"

@@ -11,7 +11,7 @@ import Site.Components as Components
 import Site.Env (env)
 import Site.Utils (selectElement_)
 
-
+-- this is the electron renderer
 main :: Effect Unit
 main = HA.runHalogenAff do
   HA.awaitLoad
@@ -20,3 +20,7 @@ main = HA.runHalogenAff do
   traverse_ (\elem -> runUI (Components.head elem) unit =<< selectElement_ "head") (HTML.headContents env)
   body <- selectElement_ "body"
   runUI Components.body unit body
+
+-- this is the electron preload
+preload :: Effect Unit
+preload = pure unit
