@@ -8,9 +8,9 @@ Electron lets you build the ui for your desktop apps with the same tools used to
 
 This repo is a POC for getting all the pieces to work together at all before using it in more substantial projects.
 
-# Full Stack
+## Full Stack
 - PureScript Halogen
 - TailwindCSS
 - ElectronJS
-- Rust + Neon
+- Rust via Neon
 - Haskell build scripts
