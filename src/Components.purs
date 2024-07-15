@@ -43,8 +43,12 @@ body =
 
     render :: ∀ slots. State -> H.ComponentHTML Action slots m
     render filepath = HH.div
-        [ css "bg-blue-300" ]
-        [ HH.button [ HP.id "btn", HE.onClick \_ -> OpenPicker ] [ HH.text "Open a File" ]
+        [ css "flex flex-col justify-center items-center w-full min-h-screen bg-blue-300" ]
+        [ HH.button
+            [ HP.id "btn"
+            , HE.onClick \_ -> OpenPicker
+            , css "flex justify-center items-center w-2/3 md:w-96 h-10 my-2 p-6 border rounded-full border-gray-800 text-center uppercase text-base font-[400] text-gray-800 hover:text-gray-200 hover:bg-gray-900"
+            ] [ HH.text "Open a File" ]
         , HH.text "File path: "
         , HH.strong [ HP.id "filePath" ] [ HH.text filepath ]
         ]

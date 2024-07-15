@@ -13,7 +13,7 @@ import Data.Text.IO qualified as T
 import Options.Applicative
 import Turtle
 
-data Command = Run | Build | BuildRelease | Test | Fmt | Install | Clean deriving (Read, Show, Eq)
+data Command = Run | RunRelease | RunNoBuild | Build | BuildRelease | Test | Fmt | Install | Clean deriving (Read, Show, Eq)
 
 newtype ScriptException = ScriptException ByteString deriving (Show)
 
@@ -28,7 +28,9 @@ main = (sh . run) =<< customExecParser (prefs showHelpOnEmpty) parser
 
 run :: Command -> Shell ()
 run cmd = case cmd of
-  Run -> procs_ "npx" ["electron", "./src/main.js"]
+  Run -> run Build >> run RunNoBuild
+  RunRelease -> run BuildRelease >> run RunNoBuild
+  RunNoBuild -> procs_ "npx" ["electron", "./src/main.js"]
   Build -> sh build
   BuildRelease -> sh buildRelease
   Test -> procs_ "cargo" ["test"]
@@ -78,7 +80,9 @@ parser =
     subcommands :: Parser Command
     subcommands =
       subparser
-        ( command "run" (info (pure Run) (progDesc "run the electron app"))
+        ( command "run" (info (pure Run) (progDesc "run the electron app with a dev build"))
+            <> command "run-release" (info (pure RunRelease) (progDesc "run the electron app with a production build"))
+            <> command "run-no-build" (info (pure RunRelease) (progDesc "run the electron app with a production build"))
             <> command "build" (info (pure Build) (progDesc "build without optimizations"))
             <> command "build-release" (info (pure BuildRelease) (progDesc "build with optimiations for release"))
             <> command "test" (info (pure Test) (progDesc "run all app tests"))
